@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Сообщения - Корпоративный мессенджер{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h2><i class="fas fa-inbox me-2"></i>Входящие сообщения</h2>
+            <p class="mb-0 opacity-75">Центр корпоративных сообщений</p>
+        </div>
+        <a href="{{ url_for('send_message') }}" class="btn btn-light">
+            <i class="fas fa-paper-plane me-2"></i>Новое сообщение
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        {% if messages.items %}
+            {% for message in messages.items %}
+            <div class="card mb-3 
+                 {% if not message.is_read %}border-primary{% endif %}
+                 {% if message.priority == 'urgent' %}border-warning{% endif %}
+                 {% if message.priority == 'emergency' %}border-danger{% endif %}">
+                <div class="card-header d-flex justify-content-between align-items-center
+                     {% if not message.is_read %}bg-light{% endif %}
+                     {% if message.priority == 'urgent' %}bg-warning bg-opacity-25{% endif %}
+                     {% if message.priority == 'emergency' %}bg-danger bg-opacity-25{% endif %}">
+                    <div>
+                        <strong>{{ message.sender.username }}</strong>
+                        <small class="text-muted">- {{ message.sender.position }}, {{ message.sender.department }}</small>
+                        {% if message.priority != 'normal' %}
+                            <span class="badge ms-2
+                                {% if message.priority == 'urgent' %}bg-warning text-dark{% endif %}
+                                {% if message.priority == 'emergency' %}bg-danger{% endif %}">
+                                {% if message.priority == 'urgent' %}СРОЧНО{% endif %}
+                                {% if message.priority == 'emergency' %}ЭКСТРЕННО{% endif %}
+                            </span>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <small class="text-muted me-3">{{ message.timestamp.strftime('%d.%m.%Y %H:%M') }}</small>
+                        {% if not message.is_read %}
+                            <span class="badge bg-primary">Новое</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ message.content }}</p>
+                    {% if not message.is_read %}
+                        <a href="{{ url_for('mark_read', message_id=message.id) }}" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-check"></i> Отметить как прочитанное
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Пагинация -->
+            {% if messages.pages > 1 %}
+            <nav aria-label="Навигация по страницам">
+                <ul class="pagination justify-content-center">
+                    {% if messages.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('messages', page=messages.prev_num) }}">Предыдущая</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for page_num in messages.iter_pages() %}
+                        {% if page_num %}
+                            {% if page_num != messages.page %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('messages', page=page_num) }}">{{ page_num }}</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ page_num }}</span>
+                                </li>
+                            {% endif %}
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if messages.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('messages', page=messages.next_num) }}">Следующая</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        {% else %}
+            <div class="text-center">
+                <i class="fas fa-inbox fa-5x text-muted mb-3"></i>
+                <h4 class="text-muted">Нет сообщений</h4>
+                <p class="text-muted">У вас пока нет входящих сообщений</p>
+                <a href="{{ url_for('send_message') }}" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Отправить первое сообщение
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Отправить сообщение - Корпоративный мессенджер{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-paper-plane"></i> Отправить сообщение</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="recipient" class="form-label">Получатель</label>
+                        <select class="form-control" id="recipient" name="recipient" required>
+                            <option value="">Выберите получателя</option>
+                            {% for user in users %}
+                                <option value="{{ user.username }}">
+                                    {{ user.username }} - {{ user.position }}, {{ user.department }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="priority" class="form-label">Приоритет</label>
+                        <select class="form-control" id="priority" name="priority">
+                            <option value="normal">Обычный</option>
+                            <option value="urgent">Срочный</option>
+                            <option value="emergency">Экстренный</option>
+                        </select>
+                        <div class="form-text">
+                            <small><strong>Экстренный:</strong> критические ситуации, требующие немедленного внимания</small><br>
+                            <small><strong>Срочный:</strong> важные вопросы, требующие быстрого ответа</small>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Сообщение</label>
+                        <textarea class="form-control" id="content" name="content" rows="6" 
+                                  placeholder="Введите ваше сообщение..." required></textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary me-md-2">Отмена</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Отправить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="alert alert-info">
+            <h6><i class="fas fa-info-circle"></i> Рекомендации по использованию:</h6>
+            <ul class="mb-0">
+                <li>Используйте экстренный приоритет только для критических медицинских ситуаций</li>
+                <li>Убедитесь в правильности выбора получателя</li>
+                <li>Соблюдайте конфиденциальность медицинской информации</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

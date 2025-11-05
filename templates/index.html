@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    <h1 class="display-4"><i class="fas fa-hospital me-3"></i>HealthMessenger</h1>
+    <p class="lead">Корпоративный мессенджер для учреждений здравоохранения</p>
+    <hr class="my-4">
+    <p>Безопасная система обмена сообщениями между медицинским персоналом</p>
+    <div class="mt-4">
+        <a class="btn btn-primary btn-lg me-3" href="{{ url_for('login') }}">
+            <i class="fas fa-sign-in-alt me-2"></i>Войти
+        </a>
+        <a class="btn btn-outline-primary btn-lg" href="{{ url_for('register') }}">
+            <i class="fas fa-user-plus me-2"></i>Регистрация
+        </a>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card feature-card">
+            <div class="card-body">
+                <i class="fas fa-shield-alt feature-icon"></i>
+                <h5>Безопасность</h5>
+                <p>Защищенная передача медицинских данных</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card feature-card">
+            <div class="card-body">
+                <i class="fas fa-users feature-icon"></i>
+                <h5>Командная работа</h5>
+                <p>Эффективное взаимодействие персонала</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card feature-card">
+            <div class="card-body">
+                <i class="fas fa-clock feature-icon"></i>
+                <h5>Оперативность</h5>
+                <p>Быстрая передача критической информации</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

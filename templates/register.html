@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация - Корпоративный мессенджер{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-user-plus"></i> Регистрация нового пользователя</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Имя пользователя</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Пароль</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="department" class="form-label">Отделение</label>
+                                <select class="form-control" id="department" name="department" required>
+                                    <option value="">Выберите отделение</option>
+                                    <option value="Кардиология">Кардиология</option>
+                                    <option value="Неврология">Неврология</option>
+                                    <option value="Хирургия">Хирургия</option>
+                                    <option value="Терапия">Терапия</option>
+                                    <option value="Педиатрия">Педиатрия</option>
+                                    <option value="Реанимация">Реанимация</option>
+                                    <option value="Администрация">Администрация</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="position" class="form-label">Должность</label>
+                                <select class="form-control" id="position" name="position" required>
+                                    <option value="">Выберите должность</option>
+                                    <option value="Врач">Врач</option>
+                                    <option value="Медсестра">Медсестра</option>
+                                    <option value="Заведующий отделением">Заведующий отделением</option>
+                                    <option value="Главный врач">Главный врач</option>
+                                    <option value="Администратор">Администратор</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
+                </form>
+                <div class="text-center mt-3">
+                    <p>Уже есть аккаунт? <a href="{{ url_for('login') }}">Войти</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
