@@ -4,10 +4,10 @@
 
 {% block content %}
 <div class="page-header">
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-center align-items center">
         <div>
             <h2><i class="fas fa-inbox me-2"></i>Входящие сообщения</h2>
-            <p class="mb-0 opacity-75">Центр корпоративных сообщений</p>
+            <p class="mb-0 opacity-100">Центр корпоративных сообщений</p>
         </div>
         <a href="{{ url_for('send_message') }}" class="btn btn-light">
             <i class="fas fa-paper-plane me-2"></i>Новое сообщение
@@ -18,7 +18,7 @@
 <div class="row">
     <div class="col-md-12">
         {% if messages.items %}
-            {% for message in messages.items %}
+           {% for message in messages.items %}
             <div class="card mb-3 
                  {% if not message.is_read %}border-primary{% endif %}
                  {% if message.priority == 'urgent' %}border-warning{% endif %}

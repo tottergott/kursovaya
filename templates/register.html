@@ -35,13 +35,9 @@
                                 <label for="department" class="form-label">Отделение</label>
                                 <select class="form-control" id="department" name="department" required>
                                     <option value="">Выберите отделение</option>
-                                    <option value="Кардиология">Кардиология</option>
-                                    <option value="Неврология">Неврология</option>
-                                    <option value="Хирургия">Хирургия</option>
-                                    <option value="Терапия">Терапия</option>
-                                    <option value="Педиатрия">Педиатрия</option>
-                                    <option value="Реанимация">Реанимация</option>
-                                    <option value="Администрация">Администрация</option>
+                                    {% for dept in departments %}
+                                        <option value="{{ dept[0] }}">{{ dept[1] }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                         </div>
@@ -62,7 +58,7 @@
                     <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
                 </form>
                 <div class="text-center mt-3">
-                    <p>Уже есть аккаунт? <a href="{{ url_for('login') }}">Войти</a></p>
+                    <p style="color: #333 !important;">Уже есть аккаунт? <a href="{{ url_for('login') }}">Войти</a></p>
                 </div>
             </div>
         </div>
