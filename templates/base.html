@@ -42,5 +42,57 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    {% if current_user.is_authenticated %}
+    <script>
+        function checkNotifications() {
+            fetch('/api/notifications')
+                .then(response => response.json())
+                .then(data => {
+                    const badge = document.getElementById('unread-badge');
+                    if (data.unread_count > 0) {
+                        if (!badge) {
+                            const messagesLink = document.querySelector('a[href="{{ url_for("messages") }}"]');
+                            if (messagesLink) {
+                                messagesLink.innerHTML += ' <span id="unread-badge" class="badge bg-danger">' + data.unread_count + '</span>';
+                            }
+                        } else {
+                            badge.textContent = data.unread_count;
+                        }
+                        
+                        if (data.recent_messages.length > 0) {
+                            const latest = data.recent_messages[0];
+                            if (latest.priority === 'emergency') {
+                                showNotification('Экстренное сообщение от ' + latest.sender, latest.content, 'danger');
+                            }
+                        }
+                    } else if (badge) {
+                        badge.remove();
+                    }
+                })
+                .catch(error => console.log('Ошибка получения уведомлений:', error));
+        }
+        
+        function showNotification(title, message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; max-width: 300px;';
+            alertDiv.innerHTML = `
+                <strong>${title}</strong><br>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+        
+        checkNotifications();
+        setInterval(checkNotifications, 10000);
+    </script>
+    {% endif %}
 </body>
 </html>

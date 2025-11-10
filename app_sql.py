@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, jsonify
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -384,6 +384,37 @@ def mark_read(message_id):
     
     conn.close()
     return redirect(url_for('messages'))
+
+@app.route('/api/notifications')
+@login_required
+def get_notifications():
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT COUNT(*) FROM messages WHERE recipient_id = ? AND is_read = 0', (current_user.id,))
+    unread_count = cursor.fetchone()[0]
+    
+    cursor.execute('''
+        SELECT m.content, u.username, m.timestamp, m.priority
+        FROM messages m
+        JOIN users u ON m.sender_id = u.id
+        WHERE m.recipient_id = ? AND m.is_read = 0
+        ORDER BY m.timestamp DESC
+        LIMIT 5
+    ''', (current_user.id,))
+    
+    recent_messages = cursor.fetchall()
+    conn.close()
+    
+    return jsonify({
+        'unread_count': unread_count,
+        'recent_messages': [{
+            'content': msg[0][:50] + '...' if len(msg[0]) > 50 else msg[0],
+            'sender': msg[1],
+            'timestamp': msg[2],
+            'priority': msg[3]
+        } for msg in recent_messages]
+    })
 
 @app.route('/download/<path:filename>')
 @login_required
